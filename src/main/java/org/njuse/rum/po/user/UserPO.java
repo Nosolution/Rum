@@ -1,9 +1,9 @@
-package org.njuse.rum.vo.user.LoginAndSignup;
+package org.njuse.rum.po.user;
 
-public class SignupForm {
-    private String username;
-    private String password;
-    private String email;
+public class UserPO {
+    String username;
+    String password;
+    String email;
 
     public String getUsername() {
         return username;

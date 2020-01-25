@@ -1,4 +1,4 @@
-package org.njuse.rum.vo.user.LoginAndSignup;
+package org.njuse.rum.vo.LoginAndSignup;
 
 public class LoginForm {
     private String username;
