@@ -42,4 +42,15 @@ public class LoginAndSignupTest {
                 .andExpect(status().is(HttpStatus.OK.value()));
 
     }
+
+    @Test
+    public void test3() throws Exception {
+        RequestBuilder request = post("/signup")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content("{\"username\":\"testSignup\",\"password\":\"123qwe\",\"email\":\"456@qq.com\"}");
+        mockMvc.perform(request)
+                .andExpect(status().is(HttpStatus.OK.value()));
+
+    }
 }

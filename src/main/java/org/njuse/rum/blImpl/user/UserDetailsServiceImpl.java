@@ -1,6 +1,6 @@
 package org.njuse.rum.blImpl.user;
 
-import org.njuse.rum.mappers.user.AccountMapper;
+import org.njuse.rum.mappers.user.UserMapper;
 import org.njuse.rum.po.user.UserPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,15 +15,13 @@ import java.util.Collection;
 @Service("self-definition")
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    AccountMapper am;
+    UserMapper am;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        {
-            UserPO u = am.findByUsername(username);
-            Collection<? extends GrantedAuthority> n = new ArrayList<>();
-            UserDetails res = new User(u.getUsername(), u.getPassword(), n);
-            return res;
-        }
+        UserPO u = am.findByUsername(username);
+        Collection<? extends GrantedAuthority> n = new ArrayList<>();
+        UserDetails res = new User(u.getUsername(), u.getPassword(), n);
+        return res;
     }
 }
