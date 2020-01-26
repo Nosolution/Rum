@@ -2,12 +2,10 @@ package org.njuse.rum.controllers.LoginAndSignup;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
 
-import org.njuse.rum.config.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,34 +21,51 @@ public class LoginAndSignupTest {
 
     @Test
     public void test1() throws Exception {
-        RequestBuilder request = post("/login")
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .content("{\"username\":\"root\",\"password\":\"qweasdzx\"}");
-        mockMvc.perform(request)
-                .andExpect(content().string("{\"msg\":\"" + JwtAuthenticationEntryPoint.WRONG_MSG + "\"}\n"))
-                .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()));
-    }
-
-    @Test
-    public void test2() throws Exception {
-        RequestBuilder request = post("/login")
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .content("{\"username\":\"root\",\"password\":\"qweasdzxc\"}");
-        mockMvc.perform(request)
-                .andExpect(status().is(HttpStatus.OK.value()));
-
-    }
-
-    @Test
-    public void test3() throws Exception {
+        // 测试注册
+        // 要先确保数据库中没有testSignup的用户
         RequestBuilder request = post("/signup")
                 .contentType(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .content("{\"username\":\"testSignup\",\"password\":\"123qwe\",\"email\":\"456@qq.com\"}");
         mockMvc.perform(request)
                 .andExpect(status().is(HttpStatus.OK.value()));
-
     }
+
+    @Test
+    public void test2() throws Exception {
+        // 测试注册重名用户
+        // 要先确保数据库中没有名为exist的用户
+        RequestBuilder request = post("/signup")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content("{\"username\":\"exist\",\"password\":\"123qwe\",\"email\":\"456@qq.com\"}");
+        mockMvc.perform(request)
+                .andExpect(status().is(HttpStatus.OK.value()));
+
+        request = post("/signup")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content("{\"username\":\"exist\",\"password\":\"123qwe\",\"email\":\"456@qq.com\"}");
+        mockMvc.perform(request)
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+    }
+
+    @Test
+    public void test3() throws Exception {
+        // 测试密码加密
+        // 账户为encry的密码是经过加密的
+        RequestBuilder request = post("/signup")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content("{\"username\":\"encry\",\"password\":\"123qwe\",\"email\":\"456@qq.com\"}");
+        mockMvc.perform(request)
+                .andExpect(status().is(HttpStatus.OK.value()));
+        request = post("/login")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content("{\"username\":\"encry\",\"password\":\"123qwe\"}");
+        mockMvc.perform(request)
+                .andExpect(status().is(HttpStatus.OK.value()));
+    }
+
 }
