@@ -15,11 +15,11 @@ import java.util.Collection;
 @Service("self-definition")
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    UserMapper am;
+    UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        UserPO u = am.findByUsername(username);
+        UserPO u = userMapper.findByUsername(username);
         Collection<? extends GrantedAuthority> n = new ArrayList<>();
         UserDetails res = new User(u.getUsername(), u.getPassword(), n);
         return res;

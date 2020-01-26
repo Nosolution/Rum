@@ -15,15 +15,15 @@ public class SignupController {
     public static final String EXIST_MSG = "用户名已存在";
 
     @Autowired
-    AccountService as;
+    AccountService accountService;
 
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestBody SignupForm signupForm) {
+    public ResponseEntity<?> signup(@RequestBody SignupForm signupForm) {
         // 用户名已存在
-        if (as.hasUser(signupForm.getUsername())) {
+        if (accountService.hasUser(signupForm.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Msg(EXIST_MSG));
         }
-        as.register(signupForm);
+        accountService.register(signupForm);
         return ResponseEntity.ok("");
     }
 }

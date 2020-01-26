@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountServiceImpl implements AccountService {
     @Autowired
-    UserMapper am;
+    UserMapper userMapper;
 
     @Override
     public boolean hasUser(String username) {
-        return am.findByUsername(username) != null;
+        return userMapper.findByUsername(username) != null;
     }
 
     @Override
@@ -27,6 +27,6 @@ public class AccountServiceImpl implements AccountService {
         userPO.setPassword(bCryptPasswordEncoder.encode(signupForm.getPassword()));
 
         userPO.setUsername(signupForm.getUsername());
-        am.insertUser(userPO);
+        userMapper.insertUser(userPO);
     }
 }
